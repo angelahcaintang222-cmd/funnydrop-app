@@ -1,0 +1,116 @@
+{
+  "users": [
+    {
+      "id": 1777899072500,
+      "username": "angelahcaintang",
+      "password": "$2b$10$q3c/wNjDQ.tsRQI0UFjL0OFpXfgiWb8BUcd0STmP5hcdRDqUso5vq"
+    },
+    {
+      "id": 1777957386402,
+      "username": "gelahcaintang",
+      "password": "$2b$10$N2OBJ4RA6A96Ot2uIBrBu.JgNtYUuMP6dm/NXXQ2FSbu2ysE.4LFC"
+    },
+    {
+      "id": 1777968744986,
+      "username": "gelahlido",
+      "password": "$2b$10$gzGuJgkZ22lzwjSxGTwYsewxr1aQT7Qpu88zjypdIzQoAVh23AvOq"
+    },
+    {
+      "id": 1778029974847,
+      "username": "gelcaintang",
+      "password": "$2b$10$MFN4slvqakr3bEoIVnRp9ecCOY7qw3yUC8LX57Z7W9At2JQgzc1ri"
+    }
+  ],
+  "jokes": [
+    {
+      "id": 1,
+      "setup": "I told my doctor I broke my arm in two places.",
+      "punchline": "He told me to stop going to those places.",
+      "category": "Dad Joke",
+      "author": "admin",
+      "likes": 1,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "setup": "Why do we tell actors to break a leg?",
+      "punchline": "Because every play has a cast.",
+      "category": "Pun",
+      "author": "admin",
+      "likes": 0,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "setup": "I asked my dog what two minus two is.",
+      "punchline": "He said nothing.",
+      "category": "General",
+      "author": "admin",
+      "likes": 0,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "setup": "My wife told me to stop acting like a flamingo.",
+      "punchline": "I had to put my foot down.",
+      "category": "Dad Joke",
+      "author": "admin",
+      "likes": 0,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "setup": "Why did the scarecrow win an award?",
+      "punchline": "Because he was outstanding in his field.",
+      "category": "General",
+      "author": "admin",
+      "likes": 0,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "setup": "A man walks into a library and asks for books about paranoia.",
+      "punchline": "The librarian whispers: They are right behind you.",
+      "category": "Dark",
+      "author": "admin",
+      "likes": 0,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "setup": "Why do cows wear bells?",
+      "punchline": "Because their horns do not work.",
+      "category": "General",
+      "author": "admin",
+      "likes": 0,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 8,
+      "setup": "I am reading a book about anti-gravity.",
+      "punchline": "It is impossible to put down.",
+      "category": "Pun",
+      "author": "admin",
+      "likes": 0,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 9,
+      "setup": "What do you call a fish without eyes?",
+      "punchline": "A fsh.",
+      "category": "General",
+      "author": "admin",
+      "likes": 0,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 10,
+      "setup": "What do you call cheese that is not yours?",
+      "punchline": "Nacho cheese.",
+      "category": "Dad Joke",
+      "author": "admin",
+      "likes": 0,
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ]
+}

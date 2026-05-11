@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title> Joke Collection</title>
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0f0e17;--surface:#1a1826;--card:#222033;--accent:#ff6b35;--yellow:#ffd166;--green:#06d6a0;--purple:#a855f7;--text:#fffffe;--muted:#a7a9be;--radius:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;background:rgba(26,24,38,.85);border-bottom:1px solid rgba(255,255,255,.07);position:sticky;top:0;z-index:100}
+.logo{font-family:'Boogaloo',cursive;font-size:2rem;color:var(--yellow)}
+.logo span{color:var(--accent)}
+#auth-section{display:flex;gap:10px;align-items:center}
+#user-info{color:var(--green);font-weight:700}
+.btn{padding:9px 20px;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid rgba(255,255,255,.25)}
+.btn-ghost{background:transparent;color:var(--muted);padding:6px 14px;font-size:.85rem}
+.btn-sm{padding:6px 16px;font-size:.82rem}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border-radius:var(--radius);padding:36px;width:100%;max-width:440px;border:1px solid rgba(255,255,255,.1)}
+.modal h2{font-family:'Boogaloo',cursive;font-size:1.8rem;color:var(--yellow);margin-bottom:20px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px;font-weight:600}
+.field input,.field select,.field textarea{width:100%;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);border-radius:10px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.95rem;padding:10px 14px;outline:none}
+.field textarea{resize:vertical;min-height:80px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.error-msg{color:#f87171;font-size:.85rem;margin-top:8px}
+.auth-tabs{display:flex;margin-bottom:24px;border-radius:10px;overflow:hidden}
+.auth-tab{flex:1;padding:10px;text-align:center;cursor:pointer;background:rgba(255,255,255,.05);font-weight:700;border:none;color:var(--muted);font-family:'Nunito',sans-serif}
+.auth-tab.active{background:var(--accent);color:#fff}
+main{max-width:900px;margin:0 auto;padding:40px 20px}
+.page-title{font-family:'Boogaloo',cursive;font-size:2.6rem;margin-bottom:8px}
+.page-subtitle{color:var(--muted);margin-bottom:32px}
+.controls{display:flex;gap:12px;align-items:center;margin-bottom:28px;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-wrap input{width:100%;background:var(--surface);border:1.5px solid rgba(255,255,255,.1);border-radius:50px;color:var(--text);font-family:'Nunito',sans-serif;padding:10px 18px 10px 42px;outline:none}
+.search-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.filter-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{padding:8px 16px;border-radius:50px;border:1.5px solid rgba(255,255,255,.12);background:transparent;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+#jokes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.joke-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);padding:24px;position:relative;transition:transform .2s}
+.joke-card:hover{transform:translateY(-4px)}
+.cat-badge{display:inline-block;padding:3px 10px;border-radius:50px;font-size:.72rem;font-weight:700;text-transform:uppercase;margin-bottom:14px;background:rgba(255,209,102,.15);color:var(--yellow)}
+.joke-setup{font-weight:700;font-size:1rem;line-height:1.5;margin-bottom:14px}
+.joke-punchline{color:var(--yellow);font-size:.95rem;font-weight:600;filter:blur(6px);transition:filter .3s;cursor:pointer;line-height:1.5}
+.joke-punchline.revealed{filter:none}
+.reveal-hint{font-size:.72rem;color:var(--muted);margin-top:6px}
+.joke-footer{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)}
+.joke-meta{font-size:.75rem;color:var(--muted)}
+.joke-meta strong{color:var(--text)}
+.joke-actions{display:flex;gap:6px;align-items:center}
+.like-btn{background:rgba(255,107,53,.12);border:none;border-radius:50px;color:var(--accent);font-weight:700;font-size:.82rem;padding:5px 12px;cursor:pointer}
+.edit-btn{background:rgba(255,209,102,.12);border:none;border-radius:50px;color:var(--yellow);font-size:.8rem;padding:5px 12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
+.del-btn{background:rgba(239,68,68,.12);border:none;border-radius:50px;color:#f87171;font-size:.8rem;padding:5px 12px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700}
+.empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)}
+#toast{position:fixed;bottom:28px;right:28px;background:var(--green);color:#0f0e17;font-weight:700;padding:12px 22px;border-radius:50px;font-size:.9rem;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.err{background:#ef4444;color:#fff}
+#fab{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;border:none;border-radius:50px;padding:14px 32px;font-family:'Boogaloo',cursive;font-size:1.2rem;cursor:pointer;display:none;z-index:90}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">Funny<span></span>Drop</div>
+<div id="auth-section">
+<span id="user-info"></span>
+<button class="btn btn-outline btn-sm" id="auth-btn" onclick="openAuth()">Login / Register</button>
+<button class="btn btn-ghost btn-sm" id="logout-btn" onclick="logout()" style="display:none">Logout</button>
+</div>
+</header>
+<main>
+<h1 class="page-title">Joke Collection</h1>
+<p class="page-subtitle">Click the punchline to reveal it. Login to add your own!</p>
+<div class="controls">
+<div class="search-wrap">
+<input type="text" id="search-input" placeholder="Search jokes..." oninput="renderJokes()"/>
+</div>
+<div class="filter-tabs" id="cat-tabs"></div>
+</div>
+<div id="jokes-grid"></div>
+</main>
+<button id="fab" onclick="openAddJoke()">+ Add Joke</button>
+<div id="toast"></div>
+<div class="modal-overlay" id="auth-modal">
+<div class="modal">
+<div class="auth-tabs">
+<button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+<button class="auth-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+</div>
+<div class="field"><label>Username</label><input type="text" id="auth-username" placeholder="Enter username"/></div>
+<div class="field"><label>Password</label><input type="password" id="auth-password" placeholder="Enter password"/></div>
+<div class="error-msg" id="auth-error"></div>
+<div class="modal-actions">
+<button class="btn btn-outline" onclick="closeModal('auth-modal')">Cancel</button>
+<button class="btn btn-primary" id="auth-submit-btn" onclick="submitAuth()">Login</button>
+</div>
+</div>
+</div>
+<div class="modal-overlay" id="joke-modal">
+<div class="modal">
+<h2 id="joke-modal-title">Add a Joke</h2>
+<input type="hidden" id="joke-edit-id"/>
+<div class="field"><label>Setup</label><textarea id="joke-setup" placeholder="Why don't scientists trust atoms?"></textarea></div>
+<div class="field"><label>Punchline</label><textarea id="joke-punchline" placeholder="Because they make up everything!"></textarea></div>
+<div class="field"><label>Category</label>
+<select id="joke-category">
+<option>General</option><option>Dad Joke</option><option>Tech</option><option>Pun</option><option>Dark</option>
+</select>
+</div>
+<div class="error-msg" id="joke-error"></div>
+<div class="modal-actions">
+<button class="btn btn-outline" onclick="closeModal('joke-modal')">Cancel</button>
+<button class="btn btn-primary" onclick="submitJoke()">Save Joke</button>
+</div>
+</div>
+</div>
+<script>
+var API='http://localhost:3000/api';
+var token=localStorage.getItem('token')||null;
+var username=localStorage.getItem('username')||null;
+var jokes=[];
+var activeCategory='All';
+var authMode='login';
+
+window.onload=function(){updateAuthUI();loadJokes();}
+
+function loadJokes(){
+fetch(API+'/jokes').then(function(r){return r.json();}).then(function(data){jokes=data;renderCategories();renderJokes();}).catch(function(){showToast('Cannot connect to server!',true);});
+}
+
+function renderCategories(){
+var cats=['All'];
+jokes.forEach(function(j){if(cats.indexOf(j.category)===-1)cats.push(j.category);});
+var el=document.getElementById('cat-tabs');
+el.innerHTML=cats.map(function(c){return '<button class="tab '+(c===activeCategory?'active':'')+'" onclick="setCategory(\''+c+'\')">'+c+'</button>';}).join('');
+}
+
+function setCategory(cat){activeCategory=cat;renderCategories();renderJokes();}
+
+function renderJokes(){
+var q=document.getElementById('search-input').value.toLowerCase();
+var filtered=jokes.filter(function(j){
+var matchCat=activeCategory==='All'||j.category===activeCategory;
+var matchQ=!q||j.setup.toLowerCase().indexOf(q)>-1||j.punchline.toLowerCase().indexOf(q)>-1;
+return matchCat&&matchQ;
+});
+var grid=document.getElementById('jokes-grid');
+if(!filtered.length){grid.innerHTML='<div class="empty-state"><p>No jokes found!</p></div>';return;}
+grid.innerHTML=filtered.map(function(j){
+var isOwn=username&&j.author===username;
+return '<div class="joke-card"><span class="cat-badge">'+j.category+'</span><p class="joke-setup">'+j.setup+'</p><div><p class="joke-punchline" onclick="this.classList.toggle(\'revealed\')">'+j.punchline+'</p><p class="reveal-hint">Tap to reveal</p></div><div class="joke-footer"><div class="joke-meta">by <strong>'+j.author+'</strong></div><div class="joke-actions"><button class="like-btn" onclick="likeJoke('+j.id+')">Like '+j.likes+'</button>'+(isOwn?'<button class="edit-btn" onclick="openEditJoke('+j.id+')">Edit</button><button class="del-btn" onclick="deleteJoke('+j.id+')">Del</button>':'')+'</div></div></div>';
+}).join('');
+}
+
+function openAuth(){document.getElementById('auth-modal').classList.add('open');}
+
+function switchTab(mode){
+authMode=mode;
+document.getElementById('tab-login').classList.toggle('active',mode==='login');
+document.getElementById('tab-register').classList.toggle('active',mode==='register');
+document.getElementById('auth-submit-btn').textContent=mode==='login'?'Login':'Register';
+}
+
+function submitAuth(){
+var u=document.getElementById('auth-username').value.trim();
+var p=document.getElementById('auth-password').value;
+var errEl=document.getElementById('auth-error');
+if(!u||!p){errEl.textContent='Fill in all fields.';return;}
+fetch(API+'/'+authMode,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})})
+.then(function(r){return r.json();})
+.then(function(data){
+if(data.error){errEl.textContent=data.error;return;}
+token=data.token;username=data.username;
+localStorage.setItem('token',token);localStorage.setItem('username',username);
+updateAuthUI();closeModal('auth-modal');showToast('Welcome '+username+'!');renderJokes();
+}).catch(function(){errEl.textContent='Server error.';});
+}
+
+function logout(){token=null;username=null;localStorage.removeItem('token');localStorage.removeItem('username');updateAuthUI();renderJokes();showToast('Logged out!');}
+
+function updateAuthUI(){
+var loggedIn=!!token;
+document.getElementById('user-info').textContent=loggedIn?username:'';
+document.getElementById('auth-btn').style.display=loggedIn?'none':'';
+document.getElementById('logout-btn').style.display=loggedIn?'':'none';
+document.getElementById('fab').style.display=loggedIn?'block':'none'
+}
+
+function openAddJoke(){
+document.getElementById('joke-modal-title').textContent='Add a Joke';
+document.getElementById('joke-edit-id').value='';
+document.getElementById('joke-setup').value='';
+document.getElementById('joke-punchline').value='';
+document.getElementById('joke-modal').classList.add('open');
+}
+
+function openEditJoke(id){
+var j=jokes.find(function(x){return x.id===id;});
+if(!j)return;
+document.getElementById('joke-modal-title').textContent='Edit Joke';
+document.getElementById('joke-edit-id').value=id;
+document.getElementById('joke-setup').value=j.setup;
+document.getElementById('joke-punchline').value=j.punchline;
+document.getElementById('joke-modal').classList.add('open');
+}
+
+function submitJoke(){
+var id=document.getElementById('joke-edit-id').value;
+var setup=document.getElementById('joke-setup').value.trim();
+var punchline=document.getElementById('joke-punchline').value.trim();
+var category=document.getElementById('joke-category').value;
+var errEl=document.getElementById('joke-error');
+if(!setup||!punchline){errEl.textContent='Fill in setup and punchline.';return;}
+var url=id?API+'/jokes/'+id:API+'/jokes';
+var method=id?'PUT':'POST';
+fetch(url,{method:method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({setup:setup,punchline:punchline,category:category})})
+.then(function(r){return r.json();})
+.then(function(data){
+if(data.error){errEl.textContent=data.error;return;}
+closeModal('joke-modal');showToast(id?'Joke updated!':'Joke added!');loadJokes();
+}).catch(function(){errEl.textContent='Server error.';});
+}
+
+function deleteJoke(id){
+if(!confirm('Delete this joke?'))return;
+fetch(API+'/jokes/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+token}})
+.then(function(){showToast('Deleted!');loadJokes();});
+}
+
+function likeJoke(id){
+if(!token){showToast('Login to like!',true);return;}
+fetch(API+'/jokes/'+id+'/like',{method:'PATCH',headers:{'Authorization':'Bearer '+token}})
+.then(function(r){return r.json();})
+.then(function(updated){var joke=jokes.find(function(j){return j.id===id;});if(joke)joke.likes=updated.likes;renderJokes();});
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+function showToast(msg,err){
+var t=document.getElementById('toast');
+t.textContent=msg;
+t.className='show'+(err?' err':'');
+setTimeout(function(){t.className='';},3000);
+}
+</script>
+</body>
+</html>
